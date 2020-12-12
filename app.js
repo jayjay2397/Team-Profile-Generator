@@ -26,6 +26,8 @@ function init() {
             getengineerQuestions();
         } else if (data.choice === "Intern"){
             getinternQuestions();
+        } else if (data.choice === "Exit") {
+            fileGenerator();
         }
     })
 };
@@ -34,9 +36,9 @@ function getmanagerQuestions(){
     inquirer.prompt(questions.managerQuestions)
     .then((res) => {
         const managerData = new Manager (res.name,
-        res.id,
-        res.email,
-        res.officeNumber);
+            res.id,
+            res.email,
+            res.officeNumber );
 
         var managerEl = htmlGenerator.managerHTMLGenerator(managerData);
         teamHTML = teamHTML + managerEl;
@@ -44,4 +46,46 @@ function getmanagerQuestions(){
     }) .catch(function(error){
         console.log(error);
     })
+};
+
+function getengineerQuestions(){
+    inquirer.prompt(questions.engineerQuestions)
+    .then((res) => {
+        const engineerData = new Engineer (res.name,
+        res.id,
+        res.email,
+        res.github );
+
+        var engineerEl = htmlGenerator.engineerHTMLGenerator(engineerData);
+        teamHTML = teamHTML + engineerEl;
+        init();
+    }) .catch(function(error){
+        console.log(error);
+    })
+};
+
+function getinternQuestions(){
+    inquirer.prompt(questions.internQuestions)
+    .then((res) => {
+        const internData = new Intern (res.name,
+        res.id,
+        res.email,
+        res.school );
+
+        var internEl = htmlGenerator.internHTMLGenerator(internData);
+        teamHTML = teamHTML + internEl;
+        init();
+    }) .catch(function(error){
+        console.log(error);
+    })
+};
+
+function fileGenerator(){
+    var mainEL = htmlGenerator.mainHTMLGenerator(teamHTML);
+    fs.writeFile(outputPath, mainEL, function(err){
+        if(err){
+            return console.log(err)
+        }
+    
+    });
 };
